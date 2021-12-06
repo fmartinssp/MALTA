@@ -1,0 +1,200 @@
+library(VIM)
+miss_rate <- c(0.05,0.1,0.15,0.20,0.25,0.30,0.35,0.40,0.45,0.50)
+
+print("####################################################################")
+print("------------------------Breast Cancer Dataset-----------------------")
+print("####################################################################")
+for (item in miss_rate){
+  file_name <- paste("C://Anaconda3//Scripts//TestesPesquisa//Bases//Breast//DadosAusentes//Breast",item,".csv", sep = '')
+  print(paste("Taxa de ausência: ", item))
+  
+  base <- read.csv(file_name, header = TRUE)
+  
+  data <- base[,1:9]
+  class <- base[,10]
+  skip <- FALSE
+  cont <- 0
+  rmse_val <- 0
+  
+  for (x in 1:10){
+    skip <- FALSE
+    tryCatch(
+      
+      expr = {
+        a.out <- hotdeck(data, imp_var=FALSE)
+        a.out = cbind(a.out, class)
+        
+        file_write = paste("C://Anaconda3//Scripts//TestesPesquisa//Bases//Breast//Hotdeck//Breast", item , "_HD.csv", sep = '')
+        
+        write.csv(a.out, file_write, row.names = FALSE)
+        
+        #Cálculo do RMSE
+        real <- read.csv("C://Anaconda3//Scripts//TestesPesquisa//Bases//Breast//Original//Breast.csv")
+        
+        predict <- c()
+        for(i in 1:nrow(a.out)){
+          predict <- append(predict, a.out[i,1])
+        }
+        
+        real_data <- c()
+        for(i in 1:nrow(real)){
+          real_data <- append(real_data, real[i,1])
+        }
+        
+        rmse_val = rmse_val + rmse(real_data,predict)
+        
+      },
+      error = function(e){
+        skip <- TRUE
+      }
+      
+    )
+    if(skip) { next } 
+    
+    
+  }#end for
+  
+  print(paste("RMSE: ", rmse_val/10))
+  
+  
+}
+
+#############################################################################
+
+print("####################################################################")
+print("------------------------Iris Dataset-----------------------------------")
+print("####################################################################")
+for (item in miss_rate){
+  file_name <- paste("C://Anaconda3//Scripts//TestesPesquisa//Bases//Iris//DadosAusentes//Iris",item,".csv", sep = '')
+  print(paste("Taxa de ausência: ", item))
+  
+  base <- read.csv(file_name, header = TRUE, sep = ";")
+  
+  data <- base[,1:4]
+  class <- base[,5]
+  skip <- FALSE
+  cont <- 0
+  rmse_val <- 0
+  
+  for (x in 1:10){
+    skip <- FALSE
+    tryCatch(
+      
+      expr = {
+        a.out <- hotdeck(data, imp_var=FALSE)
+        a.out = cbind(a.out, class)
+        
+        file_write = paste("C://Anaconda3//Scripts//TestesPesquisa//Bases//Iris//Hotdeck//Iris", item , "_HD.csv", sep = '')
+        
+        write.csv(a.out, file_write, row.names = FALSE, sep = ";")
+        
+        #Cálculo do RMSE
+        real <- read.csv("C://Anaconda3//Scripts//TestesPesquisa//Bases//Iris//Original//Iris.csv", sep = ";")
+        
+        predict <- c()
+        for(i in 1:nrow(a.out)){
+          predict <- append(predict, a.out[i,1])
+        }
+        
+        real_data <- c()
+        for(i in 1:nrow(real)){
+          real_data <- append(real_data, real[i,1])
+        }
+        
+        rmse_val = rmse_val + rmse(real_data,predict)
+        
+      },
+      error = function(e){
+        skip <- TRUE
+      }
+      
+    )
+    if(skip) { next } 
+    
+    
+  }#end for
+  
+  print(paste("RMSE: ", rmse_val/10))
+  
+}
+
+#############################################################################
+
+
+print("####################################################################")
+print("------------------------Letter Dataset---------------------------------")
+print("####################################################################")
+for (item in miss_rate){
+  file_name <- paste("C://Anaconda3//Scripts//TestesPesquisa//Bases//Letter//DadosAusentes//Letter",item,".csv", sep = '')
+  print(paste("Taxa de ausência: ", item))
+  
+  base <- read.csv(file_name, header = TRUE, sep = ",")
+  
+  data <- base[,1:16]
+  class <- base[,17]
+  skip <- FALSE
+  cont <- 0
+  rmse_val <- 0
+  
+  for (x in 1:10){
+    skip <- FALSE
+    tryCatch(
+      
+      expr = {
+        a.out <- hotdeck(data, imp_var=FALSE)
+        a.out = cbind(a.out, class)
+        
+        file_write = paste("C://Anaconda3//Scripts//TestesPesquisa//Bases//Letter//Hotdeck//Letter", item , "_HD.csv", sep = '')
+        
+        write.csv(a.out, file_write, row.names = FALSE, sep = ",")
+        
+        #Cálculo do RMSE
+        real <- read.csv("C://Anaconda3//Scripts//TestesPesquisa//Bases//Letter//Original//Letter.csv", sep = ",")
+        
+        predict <- c()
+        for(i in 1:nrow(a.out)){
+          predict <- append(predict, a.out[i,1])
+        }
+        
+        real_data <- c()
+        for(i in 1:nrow(real)){
+          real_data <- append(real_data, real[i,1])
+        }
+        
+        rmse_val = rmse_val + rmse(real_data,predict)
+        
+      },
+      error = function(e){
+        skip <- TRUE
+      }
+      
+    )
+    if(skip) { next } 
+    
+    
+  }#end for
+  
+  print(paste("RMSE: ", rmse_val/10))
+  
+}
+
+
+#############################################################################
+
+
+print("####################################################################")
+print("------------------------Inmates Dataset-----------------------------")
+print("####################################################################")
+
+file_name <- "C://Anaconda3//Scripts//TestesPesquisa//Bases//Presos//Original//Base_Atual_Numerica_33_Atributos_Completa.csv"
+base <- read.csv(file_name, header = TRUE, sep = ";")
+
+data <- base[,1:32]
+class <- base[,33]
+a.out <- hotdeck(data, imp_var=FALSE)
+a.out = cbind(a.out, class)
+file_write = "C://Anaconda3//Scripts//TestesPesquisa//Bases//Presos//Hotdeck//Presos_HD.csv"
+
+write.csv(a.out, file_write, row.names = FALSE, sep = ";")
+
+
